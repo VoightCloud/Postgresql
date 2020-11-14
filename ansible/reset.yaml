@@ -1,0 +1,15 @@
+# Reset database and db creds.
+- name: Uninstall Postgresql
+  hosts: localhost
+  vars:
+    namespace: database
+
+- name: Reset Postgresql
+  hosts: localhost
+  tasks:
+    - name: Uninstall Postgresql
+      command: helm uninstall -n "{{ namespace }}" postgresql
+      delegate_to: localhost
+
+    - name: Remove database password
+      command: kubectl delete secret -n "{{ namespace }}" postgresql-password

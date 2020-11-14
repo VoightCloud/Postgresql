@@ -1,0 +1,55 @@
+- name: Install Postgresql
+  hosts: localhost
+  vars_files: files/postgres-creds.yaml
+  vars:
+    namespace: database
+
+  tasks:
+    - name: Install Openshift Python Library
+      command: pip3 install openshift
+      delegate_to: localhost
+
+    - name: Install Ansible
+      become: true
+      apt:
+        name: ansible
+        state: present
+        update_cache: yes
+      delegate_to: localhost
+
+    - name: Install Ansible Galaxy Kubernetes
+      command: ansible-galaxy collection install community.kubernetes
+      delegate_to: localhost
+
+    - name: Create security namespace
+      community.kubernetes.k8s:
+        name: "{{ namespace }}"
+        api_version: v1
+        kind: namespace
+        state: present
+      delegate_to: localhost
+
+    - name: Add Bitnami Repo
+      community.kubernetes.helm_repository:
+        name: bitnami
+        repo_url: "https://charts.bitnami.com/bitnami"
+      delegate_to: localhost
+
+    - name: Copy Customization
+      copy:
+        src: ../postgresql-values.yaml
+        dest: /tmp/
+      delegate_to: localhost
+
+    - name: Copy Customization
+      copy:
+        src: ../postgresql-values.yaml
+        dest: /tmp/
+      delegate_to: localhost
+
+    - name: Apply Postgresql Database
+      command: >
+        helm upgrade -n "{{ namespace }}" postgresql bitnami/postgresql -f /tmp/postgresql-values.yaml
+        --set initdbUser="{{ postgresqluser }}"
+        --set postgrespassword="{{ postgresqlpass }}"
+      delegate_to: localhost
