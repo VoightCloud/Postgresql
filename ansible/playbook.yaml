@@ -51,12 +51,20 @@
       command: >
         helm install -n "{{ namespace }}" postgresql-secret /tmp/postgresql
         --set namespace="{{ namespace }}"
-        --set postgresqlPassword="{{ postgresqlpass }}"
+        --set postgresqlPassword="{{ postgrespassword }}"
       delegate_to: localhost
 
+#  -f /tmp/postgresql-values.yaml
     - name: Apply Postgresql Database
       command: >
-        helm install -n "{{ namespace }}" postgresql bitnami/postgresql -f /tmp/postgresql-values.yaml
-        --set initdbUser="{{ postgresqluser }}"
+        helm install -n "{{ namespace }}" postgresql bitnami/postgresql
+        --set global.storageClass="nfs-nas"
+        --set global.postgresql.postgresqlUsername="postgres"
+        --set global.postgresql.postgresqlDatabase="postgresqldb"
+        --set global.postgresql.existingSecret="postgresqlpassword"
+        --set image.repository="postgres"
+        --set image.tag="13.4"
+        --set service.type="LoadBalancer"
+        --set service.loadBalancerIP="192.168.137.72"
         --set namespace="{{ namespace }}"
       delegate_to: localhost

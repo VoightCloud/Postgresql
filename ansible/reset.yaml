@@ -2,14 +2,16 @@
 - name: Uninstall Postgresql
   hosts: localhost
   vars:
-    namespace: database
+    dbnamespace: database
 
 - name: Reset Postgresql
   hosts: localhost
   tasks:
     - name: Uninstall Postgresql
-      command: helm uninstall -n "{{ namespace }}" postgresql
+      command: helm uninstall -n "{{ dbnamespace }}" postgresql
       delegate_to: localhost
+      ignore_errors: true
 
-    - name: Remove database password
-      command: kubectl delete secret -n "{{ namespace }}" postgresql-password
+    - name: Uninstall Postgresql
+      command: helm uninstall -n "{{ dbnamespace }}" postgresql-secret
+      delegate_to: localhost
