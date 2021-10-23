@@ -34,7 +34,7 @@
         repository: "postgres"
         tag: "13.4"
       service:
-        type: "NodeIP"
+        type: "NodePort"
         loadBalancerIP: "192.168.137.72"
       namespace: "{{ namespace }}"
 
