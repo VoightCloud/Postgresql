@@ -20,7 +20,7 @@
 
 - name: Apply Postgresql Database
   kubernetes.core.helm:
-    name: postgresql-build
+    name: "{{ deployment }}"
     chart_ref: bitnami/postgresql
     release_namespace: "{{ namespace }}"
     release_values:
@@ -34,7 +34,7 @@
         repository: "postgres"
         tag: "13.4"
       service:
-        type: "NodePort"
+        type: "{{ serviceType }}"
         loadBalancerIP: "192.168.137.72"
       namespace: "{{ namespace }}"
 

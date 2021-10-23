@@ -1,5 +1,10 @@
 GString label = "postgresql-${UUID.randomUUID().toString()}"
 
+def IS_MAIN = ( env.BRANCH_NAME == "main" )
+
+def NAMESPACE = (IS_MAIN ? "database2" : "build")
+def DEPLOYMENT = (IS_MAIN ? "postgresql" : "postgresql-"+namespace)
+def SERVICE_TYPE = (IS_MAIN ? "LoadBalancer" : "NodePort")
 stage('Build') {
 
     podTemplate(
@@ -38,7 +43,8 @@ stage('Build') {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'MY_KUBECONFIG')]) {
                             sh "env"
                             sh "sh -c 'echo ${ansiblevaultpwd} > vaultpwd'"
-                            sh "ansible-playbook --vault-password-file=./vaultpwd ./playbook.yaml"
+                            sh "ansible-playbook --vault-password-file=./vaultpwd ./playbook.yaml -e namespace=${NAMESPACE} " +
+                                    "-e serviceType=${SERVICE_TYPE} -e deployment=${DEPLOYMENT}"
                             sh "rm vaultpwd"
                         }
                     }

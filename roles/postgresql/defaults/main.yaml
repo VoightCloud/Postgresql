@@ -1,4 +1,6 @@
+deployment: postgresql-build
 namespace: build
+serviceType: NodePort
 
 postgresuser: !vault |
   $ANSIBLE_VAULT;1.1;AES256
