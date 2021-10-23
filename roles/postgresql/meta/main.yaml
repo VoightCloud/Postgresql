@@ -1,0 +1,15 @@
+dependencies: []
+
+galaxy_info:
+  author: Jeff Voight
+  description: Ansible Role to install Postgresql Database in Kubernetes
+  company: "Voight.org"
+  license: "license (MSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - kubernetes
+    - postgresql

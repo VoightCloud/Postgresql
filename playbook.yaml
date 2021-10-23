@@ -1,0 +1,9 @@
+- name: Install Postgresql
+  hosts: localhost
+  connection: local
+
+  vars:
+    namespace: build
+
+  roles:
+    - postgresql

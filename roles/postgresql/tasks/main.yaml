@@ -1,0 +1,40 @@
+- name: Create database namespace
+  community.kubernetes.k8s:
+    name: "{{ namespace }}"
+    api_version: v1
+    kind: namespace
+    state: present
+
+- name: Add Bitnami Repo
+  community.kubernetes.helm_repository:
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: Apply Postgresql Secrets
+  community.kubernetes.helm:
+    name: postgresql-secret-build
+    chart_ref: ./roles/common/files/global
+    release_namespace: "{{ namespace }}"
+    release_values:
+      postgresqlPassword: "{{ postgrespassword }}"
+
+- name: Apply Postgresql Database
+  community.kubernetes.helm:
+    name: postgresql-build
+    chart_ref: bitnami/postgresql
+    release_namespace: "{{ namespace }}"
+    release_values:
+      global:
+        storageClass: "nfs-nas"
+        postgresql:
+          postgresqlUsername: "postgres"
+          postgresqlDatabase: "postgresqldb"
+          existingSecret: "postgresqlpassword"
+      image:
+        repository: "postgres"
+        tag: "13.4"
+      service:
+        type: "NodeIP"
+        loadBalancerIP: "192.168.137.72"
+      namespace: "{{ namespace }}"
+

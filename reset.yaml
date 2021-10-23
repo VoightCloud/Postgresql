@@ -2,7 +2,7 @@
 - name: Uninstall Postgresql
   hosts: localhost
   vars:
-    dbnamespace: database
+    dbnamespace: build
 
 - name: Reset Postgresql
   hosts: localhost
