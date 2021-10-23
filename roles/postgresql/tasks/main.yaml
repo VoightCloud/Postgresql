@@ -12,7 +12,7 @@
 
 - name: Apply Postgresql Secrets
   kubernetes.core.helm:
-    name: postgresql-secret-build
+    name: "{{ deployment }}-secret"
     chart_ref: ./roles/postgresql/files/global
     release_namespace: "{{ namespace }}"
     release_values:
