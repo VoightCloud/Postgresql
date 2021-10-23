@@ -3,7 +3,7 @@ GString label = "postgresql-${UUID.randomUUID().toString()}"
 def IS_MAIN = ( env.BRANCH_NAME == "main" )
 
 def NAMESPACE = (IS_MAIN ? "database2" : "build")
-def DEPLOYMENT = (IS_MAIN ? "postgresql" : "postgresql-"+namespace)
+def DEPLOYMENT = (IS_MAIN ? "postgresql" : "postgresql-"+NAMESPACE)
 def SERVICE_TYPE = (IS_MAIN ? "LoadBalancer" : "NodePort")
 stage('Build') {
 
