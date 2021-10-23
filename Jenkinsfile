@@ -1,4 +1,4 @@
-GString label = "docker-ansible${UUID.randomUUID().toString()}"
+GString label = "postgresql-${UUID.randomUUID().toString()}"
 
 stage('Build') {
 
@@ -36,6 +36,7 @@ stage('Build') {
                 container('ansible') {
                     withCredentials([string(credentialsId: 'ansible-vault-pwd', variable: 'ansiblevaultpwd')]) {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'MY_KUBECONFIG')]) {
+                            sh "env"
                             sh "sh -c 'echo ${ansiblevaultpwd} > vaultpwd'"
                             sh "ansible-playbook --vault-password-file=./vaultpwd ./playbook.yaml"
                             sh "rm vaultpwd"

@@ -13,7 +13,7 @@
 - name: Apply Postgresql Secrets
   community.kubernetes.helm:
     name: postgresql-secret-build
-    chart_ref: ./roles/common/files/global
+    chart_ref: ./roles/postgresql/files/global
     release_namespace: "{{ namespace }}"
     release_values:
       postgresqlPassword: "{{ postgrespassword }}"
