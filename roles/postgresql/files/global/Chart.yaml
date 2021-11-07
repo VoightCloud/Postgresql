@@ -1,6 +1,0 @@
-apiVersion: v1
-version: 0.1.0
-name: Postgresql Required
-appVersion: 0.1.0
-description: Namespaces, Credentials, and Service Accounts and RBAC for cistack
-
