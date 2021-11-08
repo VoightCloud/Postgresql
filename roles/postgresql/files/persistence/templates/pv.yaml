@@ -4,18 +4,22 @@ metadata:
   name: postgres-pv
 spec:
   capacity:
-    storage: 250Gi
+    storage: 300Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   claimRef:
     name: postgres-pvc
     namespace: database
-  nfs:
-    server: 192.168.137.3
-    path: "/volume1/Postgres"
-  mountOptions:
-    - nfsvers=4.1
+  iscsi:
+    chapAuthSession: false
+    chapAuthDiscovery: false
+    targetPortal: 192.168.137.3:3260
+    iqn: 'iqn.2000-01.com.synology:drive.postgres.402fcc5ed94'
+    lun: 01
+    fsType: 'ext4'
+    readOnly: false
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -28,5 +32,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 250Gi
+      storage: 300Gi
   volumeName: "postgres-pv"
